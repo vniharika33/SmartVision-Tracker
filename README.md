@@ -10,21 +10,24 @@ This system detects and tracks people in real-time using webcam/video input, ass
 
 ##  Real-time Object Detection
 - Uses YOLOv8 for high-speed person detection
-- Detects objects directly from webcam or uploaded video
+- Detects people directly from webcam or uploaded video
+- Real-time inference using PyTorch backend
 
 ---
 
 ##  Multi-Object Tracking
 - Uses DeepSORT for:
-  - Persistent object IDs
+  - Persistent tracking IDs
+  - Multi-object tracking
   - Re-identification across frames
-  - Real-time tracking
+  - Real-time movement tracking
 
 ---
 
-##  People Counting
-- Counts total unique people detected
-- Displays live people count on video frames
+##  People Counting Analytics
+- Counts currently visible tracked people
+- Prevents repeated counting of same person
+- Displays live people count on processed frames
 
 ---
 
@@ -35,19 +38,21 @@ Supports:
 - Video upload APIs
 - Tracking APIs
 - Analytics APIs
+- Video processing backend
 
 ---
 
 ##  Processed Video Generation
-- Saves output tracked video
-- Displays:
-  - Bounding boxes
-  - Tracking IDs
-  - People count
+The system generates processed surveillance videos containing:
+- Bounding boxes
+- Tracking IDs
+- People count analytics
 
 ---
 
-# 🧠 System Architecture
+# 🧠
+
+ System Architecture
 
 ```text
                 ┌─────────────────────┐
@@ -87,6 +92,63 @@ Supports:
 
 ---
 
+# 🎥 Demo Output
+
+##  Real-time Tracking Output
+
+The processed output video contains:
+- Person detection
+- Persistent tracking IDs
+- Live people count
+- Multi-object tracking
+
+### Example Output
+
+```text
+People Count: 3
+
+ID: 1
+ID: 2
+ID: 3
+```
+
+---
+
+## 📹 Demo Video
+
+(Add your processed tracking video here)
+
+Example:
+
+```md
+https://github.com/user-attachments/assets/demo-video-link
+```
+
+
+---
+
+# 🌐 FastAPI Swagger Interface
+
+The backend APIs are exposed using FastAPI.
+
+Swagger documentation is automatically generated.
+
+## Swagger Docs
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+(Add Swagger screenshot here)
+
+Example:
+
+```md
+![Swagger Docs](assets/swagger.png)
+```
+
+---
+
 # 🛠️ Tech Stack
 
 | Category | Technologies |
@@ -94,7 +156,7 @@ Supports:
 | Programming | Python |
 | Object Detection | YOLOv8 |
 | Object Tracking | DeepSORT |
-| Backend | FastAPI |
+| Backend Framework | FastAPI |
 | Computer Vision | OpenCV |
 | Deep Learning | PyTorch |
 | API Server | Uvicorn |
@@ -113,8 +175,8 @@ SmartVision-Tracker/
 │
 ├── videos/
 ├── outputs/
+├── assets/
 │
-├── test.py
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -210,10 +272,12 @@ Returns:
 POST /track-video
 ```
 
-Uploads and processes video with:
+Uploads and processes surveillance video using:
 - YOLOv8 detection
 - DeepSORT tracking
-- People counting
+- People analytics
+
+Processed output video is saved automatically.
 
 ---
 
@@ -221,30 +285,30 @@ Uploads and processes video with:
 
 The system currently supports:
 
-- Real-time webcam tracking
-- Persistent tracking IDs
-- Multi-person tracking
-- People analytics
-- REST API backend
-- Video upload processing
+  Real-time webcam tracking  
+  Multi-person tracking  
+  Persistent tracking IDs  
+  People counting analytics  
+  REST API backend  
+  Video upload processing  
+  Processed video generation  
 
 ---
 
-#  Example Output
-
-The processed output video contains:
-
-✅ Bounding boxes  
-✅ Tracking IDs  
-✅ Live people count  
-
-Example:
+#  Example Workflow
 
 ```text
-People Count: 3
-ID: 1
-ID: 2
-ID: 3
+Video Input
+      ↓
+YOLOv8 Detection
+      ↓
+DeepSORT Tracking
+      ↓
+People Analytics
+      ↓
+FastAPI Backend
+      ↓
+Processed Output Video
 ```
 
 ---
@@ -258,5 +322,7 @@ ID: 3
 - Streamlit frontend
 - Cloud deployment
 - Multi-camera support
+- Database integration
 
+---
 
