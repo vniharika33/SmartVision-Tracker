@@ -51,9 +51,7 @@ The system generates processed surveillance videos containing:
 
 ---
 
-# 🧠
-
- System Architecture
+# 🧠 System Architecture
 
 ```text
                 ┌─────────────────────┐
