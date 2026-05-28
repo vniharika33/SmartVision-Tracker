@@ -1,5 +1,5 @@
 
-# AI Smart Surveillance System
+# SmartVision-Tracker
 
 An AI-powered real-time smart surveillance system built using **YOLOv8**, **DeepSORT**, **FastAPI**, and **OpenCV** for multi-object tracking, people counting, and video analytics.
 
