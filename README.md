@@ -1,3 +1,4 @@
+
 # AI Smart Surveillance System
 
 An AI-powered real-time smart surveillance system built using **YOLOv8**, **DeepSORT**, **FastAPI**, and **OpenCV** for multi-object tracking, people counting, and video analytics.
@@ -116,12 +117,11 @@ ID: 3
 
 ## 📹 Demo Video
 
-(Add your processed tracking video here)
 
 Example:
 
 ```md
-https://github.com/user-attachments/assets/demo-video-link
+https://github.com/vniharika33/SmartVision-Tracker/blob/main/assets/demo.gif
 ```
 
 
@@ -139,15 +139,9 @@ Swagger documentation is automatically generated.
 http://127.0.0.1:8000/docs
 ```
 
-(Add Swagger screenshot here)
+(https://github.com/vniharika33/SmartVision-Tracker/blob/main/assets/swagger.jpeg)
 
-Example:
 
-```md
-![Swagger Docs](assets/swagger.png)
-```
-
----
 
 # 🛠️ Tech Stack
 
