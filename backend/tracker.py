@@ -4,17 +4,23 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 import cv2
 
 # -----------------------------------
-# LOAD MODEL
+# LOAD YOLO MODEL
 # -----------------------------------
 model = YOLO("yolov8n.pt")
 
-tracker = DeepSort(max_age=30)
+# -----------------------------------
+# INITIALIZE DEEPSORT TRACKER
+# -----------------------------------
+tracker = DeepSort(
+    max_age=30
+)
 
 # -----------------------------------
-# TRACK VIDEO FUNCTION
+# VIDEO PROCESSING FUNCTION
 # -----------------------------------
 def process_video(input_path, output_path):
 
+    # Open input video
     cap = cv2.VideoCapture(input_path)
 
     # Video properties
@@ -22,7 +28,7 @@ def process_video(input_path, output_path):
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
 
-    # Output writer
+    # Output video writer
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 
     out = cv2.VideoWriter(
@@ -32,8 +38,9 @@ def process_video(input_path, output_path):
         (width, height)
     )
 
-    unique_track_ids = set()
-
+    # -----------------------------------
+    # MAIN LOOP
+    # -----------------------------------
     while True:
 
         ret, frame = cap.read()
@@ -41,13 +48,16 @@ def process_video(input_path, output_path):
         if not ret:
             break
 
-        # ---------------------------
+        # -------------------------------
         # YOLO DETECTION
-        # ---------------------------
+        # -------------------------------
         results = model(frame)
 
         detections = []
 
+        # -------------------------------
+        # EXTRACT DETECTIONS
+        # -------------------------------
         for result in results:
 
             boxes = result.boxes
@@ -60,7 +70,7 @@ def process_video(input_path, output_path):
 
                 class_id = int(box.cls[0].item())
 
-                # PERSON ONLY
+                # PERSON CLASS ONLY
                 if class_id == 0:
 
                     width_box = x2.item() - x1.item()
@@ -79,23 +89,35 @@ def process_video(input_path, output_path):
                         )
                     )
 
-        # ---------------------------
-        # TRACKING
-        # ---------------------------
+        # -------------------------------
+        # UPDATE TRACKER
+        # -------------------------------
         tracks = tracker.update_tracks(
             detections,
             frame=frame
         )
 
+        # -------------------------------
+        # STORE ACTIVE TRACK IDs
+        # -------------------------------
+        active_track_ids = set()
+
+        # -------------------------------
+        # DRAW TRACKS
+        # -------------------------------
         for track in tracks:
 
+            # Ignore unconfirmed tracks
             if not track.is_confirmed():
                 continue
 
+            # Unique ID
             track_id = track.track_id
 
-            unique_track_ids.add(track_id)
+            # Store ACTIVE ID only
+            active_track_ids.add(track_id)
 
+            # Bounding box
             ltrb = track.to_ltrb()
 
             x1, y1, x2, y2 = map(int, ltrb)
@@ -109,7 +131,7 @@ def process_video(input_path, output_path):
                 2
             )
 
-            # Draw ID
+            # Draw ID label
             cv2.putText(
                 frame,
                 f"ID: {track_id}",
@@ -120,10 +142,10 @@ def process_video(input_path, output_path):
                 2
             )
 
-        # ---------------------------
+        # -------------------------------
         # PEOPLE COUNT
-        # ---------------------------
-        people_count = len(unique_track_ids)
+        # -------------------------------
+        people_count = len(active_track_ids)
 
         cv2.putText(
             frame,
@@ -135,8 +157,16 @@ def process_video(input_path, output_path):
             3
         )
 
-        # Write frame
+        # -------------------------------
+        # WRITE OUTPUT FRAME
+        # -------------------------------
         out.write(frame)
 
+    # -----------------------------------
+    # CLEANUP
+    # -----------------------------------
     cap.release()
+
     out.release()
+
+    print("Video processing completed!")
